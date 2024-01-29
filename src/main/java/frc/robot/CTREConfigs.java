@@ -1,36 +1,40 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public final class CTREConfigs {
-    public TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
+    public TalonSRXConfiguration swerveAngleSRXConfig = new TalonSRXConfiguration();
     public TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
-    public CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
+    public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
 
     public CTREConfigs(){
-        /** Swerve CANCoder Configuration */
-        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
-
         /** Swerve Angle Motor Configurations */
         /* Motor Inverts and Neutral Mode */
-        swerveAngleFXConfig.MotorOutput.Inverted = Constants.Swerve.angleMotorInvert;
-        swerveAngleFXConfig.MotorOutput.NeutralMode = Constants.Swerve.angleNeutralMode;
+        swerveAngleSRXConfig.MotorOutput.Inverted = Constants.Swerve.angleMotorInvert;
+        swerveAngleSRXConfig.MotorOutput.NeutralMode = Constants.Swerve.angleNeutralMode;
 
         /* Gear Ratio and Wrapping Config */
-        swerveAngleFXConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.angleGearRatio;
-        swerveAngleFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
-        
-        /* Current Limiting */
-        swerveAngleFXConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
-        swerveAngleFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveAngleFXConfig.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.angleCurrentThreshold;
-        swerveAngleFXConfig.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
+        swerveAngleSRXConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.angleGearRatio;
+        swerveAngleSRXConfig.ClosedLoopGeneral.ContinuousWrap = true;
+
+        if (Constants.Swerve.angleEnableCurrentLimit) {
+            swerveAngleSRXConfig.continuousCurrentLimit = Constants.Swerve.angleCurrentLimit;
+            swerveAngleSRXConfig.peakCurrentLimit = Constants.Swerve.angleCurrentThreshold;
+            swerveAngleSRXConfig.peakCurrentDuration = (int) Constants.Swerve.angleCurrentThresholdTime * 1000;
+        }
+        else {
+            swerveAngleSRXConfig.continuousCurrentLimit = 0;
+            swerveAngleSRXConfig.peakCurrentLimit = 0;
+            swerveAngleSRXConfig.peakCurrentDuration = 0;
+        }
 
         /* PID Config */
-        swerveAngleFXConfig.Slot0.kP = Constants.Swerve.angleKP;
-        swerveAngleFXConfig.Slot0.kI = Constants.Swerve.angleKI;
-        swerveAngleFXConfig.Slot0.kD = Constants.Swerve.angleKD;
+        swerveAngleSRXConfig.slot0.kP = Constants.Swerve.angleKP;
+        swerveAngleSRXConfig.slot0.kI = Constants.Swerve.angleKI;
+        swerveAngleSRXConfig.slot0.kD = Constants.Swerve.angleKD;
+        swerveAngleSRXConfig.slot0.kF = 0;
 
         /** Swerve Drive Motor Configuration */
         /* Motor Inverts and Neutral Mode */

@@ -1,7 +1,7 @@
 package frc.lib.math;
 
 public class Conversions {
-    
+
     /**
      * @param wheelRPS Wheel Velocity: (in Rotations per Second)
      * @param circumference Wheel Circumference: (in Meters)
