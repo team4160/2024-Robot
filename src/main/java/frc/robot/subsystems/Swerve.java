@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -10,22 +8,24 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.CTREConfigs;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
-    public AHRS gyro = new AHRS(Port.kUSB);
+    public ADIS16470_IMU imu = new ADIS16470_IMU();
 
     public Swerve() {
-        gyro.resetDisplacement();
-        gyro.reset();
-        gyro.setAngleAdjustment(0);
+        // code will crash if gyro is not plugged in
+        imu.reset();
+        imu.calibrate();
+        imu.setGyroAngleX(0);
+        imu.setGyroAngleY(0);
+        imu.setGyroAngleZ(0);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -41,14 +41,14 @@ public class Swerve extends SubsystemBase {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(),
-                                    translation.getY(),
-                                    rotation,
+                                    translation.getX(), 
+                                    translation.getY(), 
+                                    rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
-                                    translation.getX(),
-                                    translation.getY(),
+                                    translation.getX(), 
+                                    translation.getY(), 
                                     rotation)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
@@ -56,12 +56,12 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }
+    }    
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-
+        
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
@@ -104,7 +104,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getGyroYaw() {
-        return (CTREConfigs.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getAngle()) : Rotation2d.fromDegrees(gyro.getAngle());
+        return Rotation2d.fromDegrees(imu.getAngle());
     }
 
     public void resetModulesToAbsolute(){
@@ -120,7 +120,7 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
     }
 }
