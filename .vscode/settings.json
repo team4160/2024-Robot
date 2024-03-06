@@ -1,6 +1,7 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
+  "files.eol": "\r\n",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

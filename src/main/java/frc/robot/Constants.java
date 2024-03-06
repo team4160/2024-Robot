@@ -129,6 +129,14 @@ public final class Constants {
         }
     }
 
+    public static final class MotorConstants {
+        public static final int intakeMotor_id = 1; // need id num
+    }
+
+    public static final class Globals {
+        public static final int compressorID = 1; // need id num
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
