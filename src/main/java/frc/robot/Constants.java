@@ -131,6 +131,8 @@ public final class Constants {
 
     public static final class MotorConstants {
         public static final int intakeMotor_id = 1; // need id num
+        public static final int shooterMotor_1_id = 1; // need id num
+        public static final int shooterMotor_2_id = 1; //need id num
     }
 
     public static final class Globals {
