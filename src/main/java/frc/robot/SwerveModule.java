@@ -37,6 +37,7 @@ public class SwerveModule {
         /* Angle Encoder Config */
         angleEncoder = new Canandcoder(moduleConstants.cancoderID);
         angleEncoder.setSettings(Robot.ctreConfigs.swerveCANcoderConfig);
+        angleEncoder.setPartyMode(2);
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
@@ -68,7 +69,7 @@ public class SwerveModule {
     }
 
     public Rotation2d getCANcoder(){
-        return Rotation2d.fromRotations(angleEncoder.getAbsPosition());
+        return Rotation2d.fromRotations(angleEncoder.getPosition());
     }
 
     public void resetToAbsolute(){
