@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -8,9 +13,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
 
@@ -18,6 +30,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public ADIS16470_IMU imu = new ADIS16470_IMU();
+    private ChassisSpeeds latestSpeeds;
 
     public Swerve() {
         // code will crash if gyro is not plugged in
@@ -35,38 +48,46 @@ public class Swerve extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        this.latestSpeeds = new ChassisSpeeds(0, 0,0);
+    }
+
+    public ChassisSpeeds getLatestSpeeds() {
+        return latestSpeeds;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation, 
-                                    getHeading()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
+        ChassisSpeeds speeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                translation.getX(),
+                translation.getY(),
+                rotation,
+                getHeading()
+        ) : new ChassisSpeeds(
+                translation.getX(),
+                translation.getY(),
+                rotation);
+
+        this.latestSpeeds = speeds;
+
+        driveChassisSpeeds(speeds, isOpenLoop);
+    }
+
+    public void driveChassisSpeeds(ChassisSpeeds speeds, boolean isOpenLoop) {
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-        
+
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
-
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -120,7 +141,51 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         }
+    }
+
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+    // Create a new SysId routine for characterizing the drive.
+    private final SysIdRoutine m_sysIdRoutine =
+        new SysIdRoutine(
+            // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                // Tell SysId how to plumb the driving voltage to the motors.
+                (Measure<Voltage> volts) -> {drive(new Translation2d(volts.magnitude()/12,0), 0, false, false);
+                },
+                // Tell SysId how to record a frame of data for each motor on the mechanism being
+                // characterized.
+                log -> {
+                  for(SwerveModule mod : mSwerveMods){
+                      log.motor("drive-module-" + mod.moduleNumber)
+                          .voltage(m_appliedVoltage.mut_replace(mod.getmDriveMotor().getMotorVoltage().getValueAsDouble(), Volts))
+                          .linearPosition(m_distance.mut_replace(mod.getmDriveMotor().getPosition().getValueAsDouble(), Meters))
+                          .linearVelocity(m_velocity.mut_replace(mod.getmDriveMotor().getVelocity().getValueAsDouble(), MetersPerSecond));
+                  }},
+                // Tell SysId to make generated commands require this subsystem, suffix test state in
+                // WPILog with this subsystem's name ("drive")
+                this));
+      /**
+     * Returns a command that will execute a quasistatic test in the given direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+      return m_sysIdRoutine.quasistatic(direction);
+    }
+    /**
+     * Returns a command that will execute a dynamic test in the given direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+      return m_sysIdRoutine.dynamic(direction);
     }
 }

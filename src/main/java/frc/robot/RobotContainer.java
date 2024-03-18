@@ -1,15 +1,17 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.Autos.TrajectoryFollowerCommands;
+import frc.robot.commands.Drive.TeleopSwerve;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,18 +35,25 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
+    private final SendableChooser<String> positionChooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                s_Swerve,
+                () -> -driver.getRawAxis(translationAxis),
+                () -> -driver.getRawAxis(strafeAxis),
+                () -> -driver.getRawAxis(rotationAxis),
                 () -> robotCentric.getAsBoolean()
             )
         );
+
+        positionChooser.setDefaultOption("DRIVE", "Drive");
+        positionChooser.addOption("DriveOutMiddle", "DriveOutMiddle");
+        positionChooser.addOption("shoot and drive", "shoot and drive");
+        positionChooser.addOption("test", "New Auto");
+        SmartDashboard.putData("AutonomousSelection", positionChooser);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -67,7 +76,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        String sp = positionChooser.getSelected();
+        boolean isBlue = DriverStation.getAlliance().toString().equals("Blue");
+        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp);
     }
 }
