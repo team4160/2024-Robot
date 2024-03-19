@@ -29,6 +29,6 @@ public class Shooter extends SubsystemBase{
     }
 
     public void shoot(double velocity){
-        shooterMotor_1.setControl(new VelocityVoltage(velocity));
+        shooterMotor_1.setControl(new VelocityVoltage(velocity * 75));
     }
 }

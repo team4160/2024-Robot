@@ -137,6 +137,8 @@ public final class Constants {
         public static final int shooterMotor_2_id = 62;
         public static final int arm_1_id = 21;
         public static final int arm_2_id = 22;
+        public static final int indexer_1_id = 31;
+        public static final int indexer_2_id = 32;
     }
 
     public static final class Globals {
