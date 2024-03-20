@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -29,6 +30,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public void shoot(double velocity){
-        shooterMotor_1.setControl(new VelocityVoltage(velocity * 75));
+        // shooterMotor_1.setControl(new VelocityVoltage(velocity * 75));
+        shooterMotor_1.setControl(new VoltageOut(velocity*12));
     }
 }

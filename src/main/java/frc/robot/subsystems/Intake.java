@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -13,6 +14,7 @@ public class Intake extends SubsystemBase{
     TalonFX intakeMotor;
     VictorSPX indexerMotor_1;
     VictorSPX indexerMotor_2;
+    TalonFXConfiguration intakeConfig = new TalonFXConfiguration();;
 
     public Intake(){
         intakeMotor = new TalonFX(Constants.MotorConstants.intakeMotor_id);
@@ -23,6 +25,12 @@ public class Intake extends SubsystemBase{
         indexerMotor_2.setInverted(true);
 
         indexerMotor_2.follow(indexerMotor_1);
+
+        intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
+        intakeConfig.CurrentLimits.SupplyCurrentThreshold = 40;
+        intakeConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
+        intakeMotor.getConfigurator().apply(intakeConfig);
     }
 
     public void setIntake(double percentOutput){
