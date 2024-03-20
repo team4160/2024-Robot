@@ -6,21 +6,18 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase{
-    
-    TalonFX intakeMotor;
-    VictorSPX indexerMotor_1;
-    VictorSPX indexerMotor_2;
+
+    TalonFX intakeMotor = new TalonFX(Constants.MotorConstants.intakeMotor_id);
+    VictorSPX indexerMotor_1 = new VictorSPX(Constants.MotorConstants.indexer_1_id);
+    VictorSPX indexerMotor_2 = new VictorSPX(Constants.MotorConstants.indexer_2_id);
     TalonFXConfiguration intakeConfig = new TalonFXConfiguration();;
 
     public Intake(){
-        intakeMotor = new TalonFX(Constants.MotorConstants.intakeMotor_id);
-        indexerMotor_1 = new VictorSPX(Constants.MotorConstants.indexer_1_id);
-        indexerMotor_2 = new VictorSPX(Constants.MotorConstants.indexer_2_id);
-
         indexerMotor_1.setInverted(true);
         indexerMotor_2.setInverted(true);
 
@@ -31,6 +28,11 @@ public class Intake extends SubsystemBase{
         intakeConfig.CurrentLimits.SupplyCurrentThreshold = 40;
         intakeConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
         intakeMotor.getConfigurator().apply(intakeConfig);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Intake Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
     }
 
     public void setIntake(double percentOutput){

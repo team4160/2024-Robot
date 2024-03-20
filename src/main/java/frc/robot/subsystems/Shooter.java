@@ -1,32 +1,32 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
 public class Shooter extends SubsystemBase{
-    TalonFX shooterMotor_1;
-    TalonFX shooterMotor_2;
+    TalonFX shooterMotor_1 = new TalonFX(Constants.MotorConstants.shooterMotor_1_id);
+    TalonFX shooterMotor_2 = new TalonFX(Constants.MotorConstants.shooterMotor_2_id);
+    TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
 
     public Shooter(){
-        // just here to make sure the motors are set to brake mode, move to its own subsystem when created
-        TalonFX armMotor_1 = new TalonFX(Constants.MotorConstants.arm_1_id);
-        TalonFX armMotor_2 = new TalonFX(Constants.MotorConstants.arm_2_id);
-        armMotor_1.setNeutralMode(NeutralModeValue.Brake);
-        armMotor_2.setNeutralMode(NeutralModeValue.Brake);
-
-        shooterMotor_1 = new TalonFX(Constants.MotorConstants.shooterMotor_1_id);
-        shooterMotor_2 = new TalonFX(Constants.MotorConstants.shooterMotor_2_id);
+        shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; // it could be coast, doesn't really matter
+        shooterMotor_1.getConfigurator().apply(shooterConfig);
+        shooterMotor_2.getConfigurator().apply(shooterConfig);
         shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true));
+    }
 
-        shooterMotor_1.setNeutralMode(NeutralModeValue.Brake); // it could be coast, doesn't really matter
-        shooterMotor_2.setNeutralMode(NeutralModeValue.Brake);
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Shooter Velocity", shooterMotor_1.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter Loop Error", shooterMotor_1.getClosedLoopError().getValueAsDouble());
     }
 
     public void shoot(double velocity){
