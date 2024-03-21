@@ -5,11 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -27,6 +28,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   Shooter shooter = new Shooter();
   Intake intake = new Intake();
+  Arm arm = new Arm();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private XboxController operator = new XboxController(1);
@@ -95,8 +97,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.shoot(operator.getRawAxis(1));
-    intake.setIntake(operator.getRawAxis(5));
+    // shooter.shoot(operator.getRawAxis(1));
+    // intake.setIntake(operator.getRawAxis(5));
+    arm.setArm(operator.getRawAxis(5));
   }
 
   @Override

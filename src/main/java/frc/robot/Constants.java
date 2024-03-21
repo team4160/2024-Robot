@@ -43,7 +43,7 @@ public final class Constants {
         public static final InvertedValue driveMotorInvert = chosenModule.driveMotorInvert;
 
         /* Angle Encoder Invert */
-        public static final boolean cancoderInvert = (chosenModule.cancoderInvert == SensorDirectionValue.Clockwise_Positive);
+        public static final boolean cancoderInvert = (chosenModule.cancoderInvert != SensorDirectionValue.Clockwise_Positive);
 
         /* Swerve Current Limiting */
         public static final int angleCurrentLimit = 25;

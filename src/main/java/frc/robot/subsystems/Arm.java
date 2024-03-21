@@ -29,7 +29,7 @@ public class Arm extends SubsystemBase{
         SmartDashboard.putNumber("Arm Position", armMotor_1.getPosition().getValueAsDouble());
     }
 
-    public void setIntake(double percentOutput){
+    public void setArm(double percentOutput){
         armMotor_1.set(percentOutput);
     }
 }

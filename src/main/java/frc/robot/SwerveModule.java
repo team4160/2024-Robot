@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -37,7 +38,8 @@ public class SwerveModule {
         /* Angle Encoder Config */
         angleEncoder = new Canandcoder(moduleConstants.cancoderID);
         angleEncoder.setSettings(Robot.ctreConfigs.swerveCANcoderConfig);
-        angleEncoder.setPartyMode(2);
+        // angleEncoder.setPartyMode(2);
+        angleEncoder.setPartyMode(0);
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
@@ -69,11 +71,13 @@ public class SwerveModule {
     }
 
     public Rotation2d getCANcoder(){
-        return Rotation2d.fromRotations(angleEncoder.getPosition());
+        SmartDashboard.putNumber("Angle " + moduleNumber, angleEncoder.getAbsPosition());
+        return Rotation2d.fromDegrees(angleEncoder.getAbsPosition() * 360);
     }
 
     public void resetToAbsolute(){
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
+        SmartDashboard.putNumber("Setting Angle " + moduleNumber, absolutePosition);
         mAngleMotor.setPosition(absolutePosition);
     }
 

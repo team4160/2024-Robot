@@ -11,6 +11,9 @@ public final class CTREConfigs {
     public CTREConfigs(){
         /** Swerve CANCoder Configuration */
         swerveCANcoderConfig.setInvertDirection(Constants.Swerve.cancoderInvert);
+        swerveCANcoderConfig.setDisableZeroButton(true);
+        swerveCANcoderConfig.setPositionFramePeriod(0.020);
+        swerveCANcoderConfig.setVelocityFramePeriod(0);
 
         /** Swerve Angle Motor Configurations */
         /* Motor Inverts and Neutral Mode */
