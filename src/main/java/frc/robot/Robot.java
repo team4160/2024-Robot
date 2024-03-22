@@ -10,7 +10,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Shooter.Ingest;
+import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -28,10 +33,15 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   Shooter shooter = new Shooter();
   Intake intake = new Intake();
+  Indexer indexer = new Indexer();
   Arm arm = new Arm();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private XboxController operator = new XboxController(1);
+  public JoystickButton toggle_intake = new JoystickButton(operator, XboxController.Button.kB.value);
+  public JoystickButton toggle_slowshot = new JoystickButton(operator, XboxController.Button.kA.value);
+  public JoystickButton toggle_fastshot = new JoystickButton(operator, XboxController.Button.kX.value);
+  public JoystickButton stop = new JoystickButton(operator, XboxController.Button.kY.value);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,6 +53,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     PD.clearStickyFaults();
+    toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
+    toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, 40));
+    toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, 75));
+
+    //cancel all commands when the stop button is pressed
+    stop.onTrue(new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));
   }
 
   /**

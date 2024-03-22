@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -13,16 +12,9 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase{
 
     TalonFX intakeMotor = new TalonFX(Constants.MotorConstants.intakeMotor_id);
-    VictorSPX indexerMotor_1 = new VictorSPX(Constants.MotorConstants.indexer_1_id);
-    VictorSPX indexerMotor_2 = new VictorSPX(Constants.MotorConstants.indexer_2_id);
     TalonFXConfiguration intakeConfig = new TalonFXConfiguration();;
 
     public Intake(){
-        indexerMotor_1.setInverted(true);
-        indexerMotor_2.setInverted(true);
-
-        indexerMotor_2.follow(indexerMotor_1);
-
         intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
         intakeConfig.CurrentLimits.SupplyCurrentThreshold = 40;
@@ -32,21 +24,19 @@ public class Intake extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Intake Current", getCurrent());
     }
 
     public void setIntake(double percentOutput){
-        if (percentOutput > 0.05) {
-            intakeMotor.setControl(new VoltageOut(percentOutput * 8));
-            indexerMotor_1.set(VictorSPXControlMode.PercentOutput, percentOutput);
-        }
-        else if (percentOutput < -0.05) {
-            intakeMotor.setControl(new VoltageOut(percentOutput * 8));
-            indexerMotor_1.set(VictorSPXControlMode.PercentOutput, percentOutput);
-        }
-        else {
-            intakeMotor.set(0);
-            indexerMotor_1.set(VictorSPXControlMode.PercentOutput, 0);
-        }
+        intakeMotor.setControl(new VoltageOut(percentOutput * 8));
+    }
+
+    public void setIntakeVelocity(double velocity){
+        intakeMotor.setControl(new VelocityVoltage(velocity));
+    }
+
+    //get the current of the intake
+    public double getCurrent(){
+        return intakeMotor.getSupplyCurrent().getValueAsDouble();
     }
 }

@@ -70,15 +70,6 @@ public class COTSTalonFXSwerveConstants {
             }
 
             public static final class driveRatios{
-                // /** WCP SwerveX Standard X0 - 10 Tooth - (7.85 : 1) */
-                // public static final double X0_10 = (13.369 / 1.0);
-
-                // /** WCP SwerveX Standard X0 - 11 Tooth - (7.13 : 1) */
-                // public static final double X0_11 = (12.15 / 1.0);
-
-                // /** WCP SwerveX Standard X0 - 12 Tooth - (6.54 : 1) */
-                // public static final double X0_12 = (11.148 / 1.0);
-
                 /** WCP SwerveX Standard X1 - 10 Tooth - (7.85 : 1) */
                 public static final double X1_10 = (7.85 / 1.0);
 
@@ -115,7 +106,7 @@ public class COTSTalonFXSwerveConstants {
                 double wheelDiameter = Units.inchesToMeters(4.0);
 
                 /** (468 / 35) : 1 */
-                double angleGearRatio = ((422.0 / 35.0) / 1.0);
+                double angleGearRatio = (12.1558441558442 / 1.0);
 
                 double angleKP = 24;
                 double angleKI = 1e-4;
@@ -132,7 +123,7 @@ public class COTSTalonFXSwerveConstants {
                 double wheelDiameter = Units.inchesToMeters(4.0);
 
                 /** (468 / 35) : 1 */
-                double angleGearRatio = ((422.0 / 35.0) / 1.0);
+                double angleGearRatio = (12.1558441558442 / 1.0);
 
                 double angleKP = 1.0;
                 double angleKI = 0.0;
