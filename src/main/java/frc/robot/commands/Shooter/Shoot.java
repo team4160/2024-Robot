@@ -1,6 +1,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -25,10 +26,11 @@ public class Shoot extends Command{
 
     @Override
     public void initialize() {
-        if (!shooter.isLoaded)
-            cancel();
+        // if (!shooter.isLoaded)
+        //     cancel();
         timer.reset();
-        shooter.shoot(velocity);
+        shooter.percentOutput(1.0);
+        SmartDashboard.putString("Shooter", "here");
     }
 
     @Override
@@ -42,7 +44,8 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(1);
+        // return timer.hasElapsed(1);
+        return false;
     }
 
     @Override

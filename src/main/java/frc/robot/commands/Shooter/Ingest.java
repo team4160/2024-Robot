@@ -10,7 +10,7 @@ public class Ingest extends Command {
     private final Indexer indexer;
     private final Shooter shooter;
     private boolean isSpiked;
-    final double intakeCurrent = 10;
+    final double intakeCurrent = 35;
 
     public Ingest(Intake intake, Indexer indexer, Shooter shooter) {
         this.intake = intake;
@@ -24,8 +24,8 @@ public class Ingest extends Command {
     @Override
     public void initialize() {
         intake.setIntakeVelocity(10);
-        indexer.setIndex(-0.25);
-        shooter.percentOutput(-0.25);
+        indexer.setIndex(-0.35);
+        shooter.percentOutput(-0.10);
     }
 
     @Override
@@ -37,9 +37,9 @@ public class Ingest extends Command {
 
     @Override
     public boolean isFinished() {
-        if (isSpiked && intake.getCurrent() < intakeCurrent) {
-            return true;
-        }
+        // if (isSpiked && intake.getCurrent() < intakeCurrent) {
+        //     return true;
+        // }
         return false;
     }
 

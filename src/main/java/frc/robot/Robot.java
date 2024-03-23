@@ -87,12 +87,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // // schedule the autonomous command (example)
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
+    new Shoot(intake, indexer, shooter, 40);
   }
 
   /** This function is called periodically during autonomous. */
@@ -115,7 +116,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // shooter.shoot(operator.getRawAxis(1));
     // intake.setIntake(operator.getRawAxis(5));
-    arm.setArm(operator.getRawAxis(5));
+    arm.setArm(operator.getRawAxis(5) * -1);
   }
 
   @Override

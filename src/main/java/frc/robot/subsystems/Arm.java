@@ -3,12 +3,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
+// import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,10 +24,10 @@ public class Arm extends SubsystemBase{
 
     public Arm(){
         armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        // armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;  // need to get the positions
-        // armConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
-        // armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        // armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        armConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 14;
+        armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+        armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
         armConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         armConfig.CurrentLimits.SupplyCurrentLimit = 40;
@@ -55,6 +55,7 @@ public class Arm extends SubsystemBase{
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Arm Position", armMotor_1.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Arm Rotor", armMotor_1.getRotorPosition().getValueAsDouble());
 
         //if match has one second left, lower the arm
         if (Timer.getMatchTime() < 1 && !endGame) {

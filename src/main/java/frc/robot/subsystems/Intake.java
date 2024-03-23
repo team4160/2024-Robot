@@ -12,13 +12,18 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase{
 
     TalonFX intakeMotor = new TalonFX(Constants.MotorConstants.intakeMotor_id);
-    TalonFXConfiguration intakeConfig = new TalonFXConfiguration();;
+    TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
 
     public Intake(){
         intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeConfig.CurrentLimits.SupplyCurrentLimit = 30;
-        intakeConfig.CurrentLimits.SupplyCurrentThreshold = 40;
+        intakeConfig.CurrentLimits.SupplyCurrentLimit = 35;
+        intakeConfig.CurrentLimits.SupplyCurrentThreshold = 45;
         intakeConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
+        intakeConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        intakeConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+        intakeConfig.Slot0.kP = 0.25;
+        intakeConfig.Slot0.kI = 25;
+        intakeConfig.Slot0.kD = 0.01;
         intakeMotor.getConfigurator().apply(intakeConfig);
     }
 
