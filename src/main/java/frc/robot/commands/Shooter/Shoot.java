@@ -29,8 +29,9 @@ public class Shoot extends Command{
         // if (!shooter.isLoaded)
         //     cancel();
         timer.reset();
-        shooter.percentOutput(1.0);
-        SmartDashboard.putString("Shooter", "here");
+        // shooter.percentOutput(1.0);
+        shooter.shoot(velocity);
+        SmartDashboard.putString("Shooter", "initialized");
     }
 
     @Override
@@ -44,15 +45,16 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished() {
-        // return timer.hasElapsed(1);
-        return false;
+        return timer.hasElapsed(1);
     }
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putString("Shooter", "finished, interrupted: " + interrupted);
         intake.setIntake(0);
         indexer.setIndex(0);
         shooter.stop();
-        shooter.isLoaded = false;
+        if (!interrupted)
+            shooter.isLoaded = false;
     }
 }

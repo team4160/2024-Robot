@@ -20,6 +20,13 @@ public class Shooter extends SubsystemBase{
     public Shooter(){
         shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; // it could be coast, doesn't really matter
         shooterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        shooterConfig.CurrentLimits.SupplyCurrentLimit = 40;
+        shooterConfig.CurrentLimits.SupplyCurrentThreshold = 50;
+        shooterConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
+        shooterConfig.Slot0.kP = 0.25;
+        shooterConfig.Slot0.kI = 25;
+        shooterConfig.Slot0.kD = 0.01;
         shooterMotor_1.getConfigurator().apply(shooterConfig);
         shooterMotor_2.getConfigurator().apply(shooterConfig);
         shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true));

@@ -12,12 +12,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Autos.SimpleAuto;
+import frc.robot.commands.Drive.ZeroHeading;
 import frc.robot.commands.Shooter.Ingest;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,10 +34,10 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  Shooter shooter = new Shooter();
-  Intake intake = new Intake();
-  Indexer indexer = new Indexer();
-  Arm arm = new Arm();
+  public static Shooter shooter = new Shooter();
+  public static Intake intake = new Intake();
+  public static Indexer indexer = new Indexer();
+  public static Arm arm = new Arm();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private XboxController operator = new XboxController(1);
@@ -93,7 +96,8 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
-    new Shoot(intake, indexer, shooter, 40);
+    new ZeroHeading(RobotContainer.s_Swerve).execute();
+    new SimpleAuto(RobotContainer.s_Swerve).schedule();
   }
 
   /** This function is called periodically during autonomous. */

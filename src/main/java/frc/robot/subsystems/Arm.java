@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+// import com.ctre.phoenix6.controls.MotionMagicVoltage;
 // import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -10,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,7 +19,7 @@ public class Arm extends SubsystemBase{
     TalonFX armMotor_1 = new TalonFX(Constants.MotorConstants.arm_1_id);
     TalonFX armMotor_2 = new TalonFX(Constants.MotorConstants.arm_2_id);
     TalonFXConfiguration armConfig = new TalonFXConfiguration();
-    private boolean endGame = false;
+    // private boolean endGame = false;
 
     public Arm(){
         armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -57,24 +56,24 @@ public class Arm extends SubsystemBase{
         SmartDashboard.putNumber("Arm Position", armMotor_1.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Arm Rotor", armMotor_1.getRotorPosition().getValueAsDouble());
 
-        //if match has one second left, lower the arm
-        if (Timer.getMatchTime() < 1 && !endGame) {
-            endGame = true;
-            // Down();
-        }
-        if (Timer.getMatchTime() <= 0 && endGame) { // reset
-            endGame = false;
-        }
+        // //if match has one second left, lower the arm
+        // if (Timer.getMatchTime() < 1 && !endGame) {
+        //     endGame = true;
+        //     // Down();
+        // }
+        // if (Timer.getMatchTime() <= 0 && endGame) { // reset
+        //     endGame = false;
+        // }
     }
 
     public void setArm(double percentOutput){
         armMotor_1.set(percentOutput);
     }
-    public void setArmAngle(double degrees) {
-        // degrees = MathUtil.clamp(degrees, ARM_LOWER_LIMIT, ARM_UPPER_LIMIT);
-        // armMotor_1.setControl(new PositionVoltage(0).withSlot(0).withPosition(degrees / 360.0));
-        armMotor_1.setControl(new MotionMagicVoltage(0).withSlot(0).withPosition(degrees / 360.0));
-    }
+    // public void setArmAngle(double degrees) {
+    //     // degrees = MathUtil.clamp(degrees, ARM_LOWER_LIMIT, ARM_UPPER_LIMIT);
+    //     // armMotor_1.setControl(new PositionVoltage(0).withSlot(0).withPosition(degrees / 360.0));
+    //     armMotor_1.setControl(new MotionMagicVoltage(0).withSlot(0).withPosition(degrees / 360.0));
+    // }
     // public void Up(){ // need to get the positions
     //     setArmAngle(0);
     // }
