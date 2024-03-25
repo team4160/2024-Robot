@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 // import com.ctre.phoenix6.controls.MotionMagicVoltage;
 // import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -23,14 +24,14 @@ public class Arm extends SubsystemBase{
 
     public Arm(){
         armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+        armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         armConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 14;
-        armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+        armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
-        armConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        armConfig.CurrentLimits.SupplyCurrentLimit = 40;
-        armConfig.CurrentLimits.SupplyCurrentThreshold = 50;
+        armConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+        armConfig.CurrentLimits.SupplyCurrentLimit = 80;
+        armConfig.CurrentLimits.SupplyCurrentThreshold = 80;
         armConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
         armConfig.Feedback.SensorToMechanismRatio = 1;
         armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine; // sensor reports a position of 0 when the mechanism is horizonal (parallel to the ground)
@@ -54,7 +55,8 @@ public class Arm extends SubsystemBase{
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Arm Position", armMotor_1.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Arm Rotor", armMotor_1.getRotorPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Arm1 Current", armMotor_1.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Arm2 Current", armMotor_2.getSupplyCurrent().getValueAsDouble());
 
         // //if match has one second left, lower the arm
         // if (Timer.getMatchTime() < 1 && !endGame) {
@@ -67,6 +69,7 @@ public class Arm extends SubsystemBase{
     }
 
     public void setArm(double percentOutput){
+        // armMotor_1.setControl(new VoltageOut(percentOutput * 12));
         armMotor_1.set(percentOutput);
     }
     // public void setArmAngle(double degrees) {

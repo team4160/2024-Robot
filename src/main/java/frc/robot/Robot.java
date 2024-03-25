@@ -15,12 +15,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autos.SimpleAuto;
 import frc.robot.commands.Drive.ZeroHeading;
 import frc.robot.commands.Shooter.Ingest;
+import frc.robot.commands.Shooter.PrimeLock;
+import frc.robot.commands.Shooter.SetLock;
 import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.Shooter.SpitOut;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lock;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,6 +41,7 @@ public class Robot extends TimedRobot {
   public static Intake intake = new Intake();
   public static Indexer indexer = new Indexer();
   public static Arm arm = new Arm();
+  public static Lock lock = new Lock();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private XboxController operator = new XboxController(1);
@@ -45,6 +49,9 @@ public class Robot extends TimedRobot {
   public JoystickButton toggle_slowshot = new JoystickButton(operator, XboxController.Button.kA.value);
   public JoystickButton toggle_fastshot = new JoystickButton(operator, XboxController.Button.kX.value);
   public JoystickButton stop = new JoystickButton(operator, XboxController.Button.kY.value);
+  public JoystickButton primeLockButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+  public JoystickButton setLockButton = new JoystickButton(operator, XboxController.Button.kBack.value);
+  public JoystickButton spitButton = new JoystickButton(operator, XboxController.Button.kLeftStick.value);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -59,6 +66,9 @@ public class Robot extends TimedRobot {
     toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
     toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, 40));
     toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, 75));
+    primeLockButton.onTrue(new PrimeLock(lock));
+    setLockButton.onTrue(new SetLock(lock));
+    spitButton.whileTrue(new SpitOut(intake, indexer, shooter));
 
     //cancel all commands when the stop button is pressed
     stop.onTrue(new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));

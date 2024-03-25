@@ -30,6 +30,7 @@ public class Shooter extends SubsystemBase{
         shooterMotor_1.getConfigurator().apply(shooterConfig);
         shooterMotor_2.getConfigurator().apply(shooterConfig);
         shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true));
+        SmartDashboard.putBoolean("Loaded", false);
     }
 
     @Override

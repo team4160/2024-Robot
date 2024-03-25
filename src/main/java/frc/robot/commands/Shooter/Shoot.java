@@ -37,6 +37,7 @@ public class Shoot extends Command{
     @Override
     public void execute() {
         if (shooter.getVelocity() > velocity - 0.1) {
+            SmartDashboard.putBoolean("Loaded", false);
             intake.setIntake(1);
             indexer.setIndex(1);
             timer.start();
@@ -54,7 +55,8 @@ public class Shoot extends Command{
         intake.setIntake(0);
         indexer.setIndex(0);
         shooter.stop();
-        if (!interrupted)
+        if (!interrupted) {
             shooter.isLoaded = false;
+        }
     }
 }

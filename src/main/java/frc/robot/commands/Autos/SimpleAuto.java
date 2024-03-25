@@ -6,16 +6,19 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.commands.Shooter.Ingest;
+import frc.robot.commands.Shooter.PrimeLock;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.Swerve;
 
@@ -33,9 +36,10 @@ public class SimpleAuto extends SequentialCommandGroup {
                 // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                List.of(),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
+                new Pose2d(4, 0, new Rotation2d(0)),
                 config);
 
         var thetaController =
@@ -57,9 +61,16 @@ public class SimpleAuto extends SequentialCommandGroup {
 
         addCommands(
             new Shoot(Robot.intake, Robot.indexer, Robot.shooter, 40),
-            new WaitCommand(10),
-            new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose())),
-            swerveControllerCommand
+            new WaitCommand(7),
+            new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose()))
+            // new ParallelCommandGroup(
+            // new PrimeLock(Robot.lock)
+                 //new ParallelRaceGroup(
+                   // new Ingest(Robot.intake, Robot.indexer, Robot.shooter),
+                   // swerveControllerCommand,  //  run the simple path
+                   // new WaitCommand(7)
+                //)
+            // )
         );
     }
 }

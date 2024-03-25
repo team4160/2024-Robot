@@ -46,13 +46,13 @@ public final class Constants {
         public static final boolean cancoderInvert = (chosenModule.cancoderInvert != SensorDirectionValue.Clockwise_Positive);
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25;
+        public static final int angleCurrentLimit = 30;
         public static final int angleCurrentThreshold = 40;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
-        public static final int driveCurrentThreshold = 60;
+        public static final int driveCurrentLimit = 60;
+        public static final int driveCurrentThreshold = 75;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -139,6 +139,7 @@ public final class Constants {
         public static final int arm_2_id = 22;
         public static final int indexer_1_id = 31;
         public static final int indexer_2_id = 32;
+        public static final int lock_id = 14;
     }
 
     public static final class Globals {
