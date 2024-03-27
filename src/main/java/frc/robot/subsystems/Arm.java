@@ -24,16 +24,19 @@ public class Arm extends SubsystemBase{
 
     public Arm(){
         armConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
         armConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 14;
-        armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
         armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
         armConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
         armConfig.CurrentLimits.SupplyCurrentLimit = 80;
         armConfig.CurrentLimits.SupplyCurrentThreshold = 80;
         armConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
-        armConfig.Feedback.SensorToMechanismRatio = 1;
+        armConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+        armConfig.CurrentLimits.StatorCurrentLimit = 100;
+
+        armConfig.Feedback.SensorToMechanismRatio = 144;
         armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine; // sensor reports a position of 0 when the mechanism is horizonal (parallel to the ground)
         armConfig.Slot0.kP = 72; // need to test these values, got them from 4467
         armConfig.Slot0.kI = 6.0;

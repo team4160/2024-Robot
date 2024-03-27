@@ -16,9 +16,11 @@ public class Intake extends SubsystemBase{
 
     public Intake(){
         intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeConfig.CurrentLimits.SupplyCurrentLimit = 35;
+        intakeConfig.CurrentLimits.SupplyCurrentLimit = 120;
+        intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        intakeConfig.CurrentLimits.StatorCurrentLimit = 120;
+        intakeConfig.CurrentLimits.SupplyTimeThreshold = 0;
         intakeConfig.CurrentLimits.SupplyCurrentThreshold = 45;
-        intakeConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
         intakeConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
         intakeConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
         intakeConfig.Slot0.kP = 0.25;

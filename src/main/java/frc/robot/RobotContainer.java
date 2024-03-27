@@ -49,10 +49,11 @@ public class RobotContainer {
             )
         );
 
-        positionChooser.setDefaultOption("DRIVE", "Drive");
-        positionChooser.addOption("DriveOutMiddle", "DriveOutMiddle");
-        positionChooser.addOption("shoot and drive", "shoot and drive");
-        positionChooser.addOption("test", "New Auto");
+        // positionChooser.setDefaultOption("DRIVE", "Drive");
+        positionChooser.setDefaultOption("Square", "Square");
+        // positionChooser.addOption("DriveOutMiddle", "DriveOutMiddle");
+        // positionChooser.addOption("shoot and drive", "shoot and drive");
+        // positionChooser.addOption("test", "New Auto");
         SmartDashboard.putData("AutonomousSelection", positionChooser);
 
         // Configure the button bindings

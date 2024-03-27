@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Autos.SimpleAuto;
-import frc.robot.commands.Drive.ZeroHeading;
+import frc.lib.util.LinearServo;
 import frc.robot.commands.Shooter.Ingest;
 import frc.robot.commands.Shooter.PrimeLock;
 import frc.robot.commands.Shooter.SetLock;
@@ -52,6 +51,7 @@ public class Robot extends TimedRobot {
   public JoystickButton primeLockButton = new JoystickButton(operator, XboxController.Button.kStart.value);
   public JoystickButton setLockButton = new JoystickButton(operator, XboxController.Button.kBack.value);
   public JoystickButton spitButton = new JoystickButton(operator, XboxController.Button.kLeftStick.value);
+  private LinearServo servo = new LinearServo(9, 100, 50);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -59,6 +59,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // servo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+    // servo.setPeriodMultiplier(PeriodMultiplier.k4X);
+    // servo.setAlwaysHighMode();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -100,14 +103,14 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
-    new ZeroHeading(RobotContainer.s_Swerve).execute();
-    new SimpleAuto(RobotContainer.s_Swerve).schedule();
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
+    // new ZeroHeading(RobotContainer.s_Swerve).execute();
+    // new SimpleAuto(RobotContainer.s_Swerve).schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -130,7 +133,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // shooter.shoot(operator.getRawAxis(1));
     // intake.setIntake(operator.getRawAxis(5));
-    arm.setArm(operator.getRawAxis(5) * -1);
+    arm.setArm(operator.getRawAxis(XboxController.Axis.kRightY.value) * -1);
   }
 
   @Override
