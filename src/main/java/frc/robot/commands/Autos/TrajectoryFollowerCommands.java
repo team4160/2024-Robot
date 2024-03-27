@@ -31,9 +31,12 @@ public class TrajectoryFollowerCommands {
 
     }
 
-    public FollowPathHolonomic followPath(String chosenPath) {
+    public FollowPathHolonomic followPath(String chosenPath, boolean startingPath) {
 
         PathPlannerPath path = PathPlannerPath.fromPathFile(chosenPath);
+
+        if(startingPath)
+            s_swerve.swerveOdometry.resetPosition(path.getPoint(0).rotationTarget.getTarget(), s_swerve.getModulePositions(), path.getStartingDifferentialPose());
 
         return new FollowPathHolonomic(
                 path,

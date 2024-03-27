@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.util.Vision;
 import frc.robot.commands.Autos.TrajectoryFollowerCommands;
 import frc.robot.commands.Drive.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -34,6 +35,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public static Swerve s_Swerve = new Swerve();
+    public static Vision vision = new Vision();
 
     private final SendableChooser<String> positionChooser = new SendableChooser<>();
 
@@ -79,6 +81,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         String sp = positionChooser.getSelected();
         boolean isBlue = DriverStation.getAlliance().toString().equals("Blue");
-        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp);
+        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp, true);
     }
 }
