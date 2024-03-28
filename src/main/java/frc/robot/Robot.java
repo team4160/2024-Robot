@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -12,16 +13,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.lib.util.LinearServo;
 import frc.robot.commands.Shooter.Ingest;
-import frc.robot.commands.Shooter.PrimeLock;
-import frc.robot.commands.Shooter.SetLock;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.SpitOut;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Lock;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -40,7 +37,6 @@ public class Robot extends TimedRobot {
   public static Intake intake = new Intake();
   public static Indexer indexer = new Indexer();
   public static Arm arm = new Arm();
-  public static Lock lock = new Lock();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
   private XboxController operator = new XboxController(1);
@@ -51,7 +47,6 @@ public class Robot extends TimedRobot {
   public JoystickButton primeLockButton = new JoystickButton(operator, XboxController.Button.kStart.value);
   public JoystickButton setLockButton = new JoystickButton(operator, XboxController.Button.kBack.value);
   public JoystickButton spitButton = new JoystickButton(operator, XboxController.Button.kLeftStick.value);
-  private LinearServo servo = new LinearServo(9, 100, 50);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -59,6 +54,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    PortForwarder.add(5800, "photonvision.local", 5800);
     // servo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     // servo.setPeriodMultiplier(PeriodMultiplier.k4X);
     // servo.setAlwaysHighMode();
@@ -69,8 +65,6 @@ public class Robot extends TimedRobot {
     toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
     toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, 40));
     toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, 75));
-    primeLockButton.onTrue(new PrimeLock(lock));
-    setLockButton.onTrue(new SetLock(lock));
     spitButton.whileTrue(new SpitOut(intake, indexer, shooter));
 
     //cancel all commands when the stop button is pressed

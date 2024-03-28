@@ -1,5 +1,7 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
@@ -11,7 +13,8 @@ public class Ingest extends Command {
     private final Indexer indexer;
     private final Shooter shooter;
     private boolean isSpiked;
-    final double intakeCurrent = 35;
+    final double intakeCurrent = 12;
+    private final Timer timer = new Timer();
 
     public Ingest(Intake intake, Indexer indexer, Shooter shooter) {
         this.intake = intake;
@@ -24,6 +27,8 @@ public class Ingest extends Command {
 
     @Override
     public void initialize() {
+        timer.stop();
+        timer.reset();
         intake.setIntakeVelocity(10);
         isSpiked = false;
     }
@@ -32,6 +37,7 @@ public class Ingest extends Command {
     public void execute() {
         if (intake.getCurrent() > intakeCurrent && !isSpiked) {
             isSpiked = true;
+            timer.start();
             SmartDashboard.putBoolean("Loaded", true);
             indexer.setIndex(-0.35);
             shooter.percentOutput(-0.10);
@@ -40,10 +46,7 @@ public class Ingest extends Command {
 
     @Override
     public boolean isFinished() {
-        if (isSpiked && intake.getCurrent() < 10) {
-            return true;
-        }
-        return false;
+        return timer.hasElapsed(1);
     }
 
     @Override

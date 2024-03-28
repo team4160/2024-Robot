@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase{
         shooterConfig.Slot0.kD = 0.01;
         shooterMotor_1.getConfigurator().apply(shooterConfig);
         shooterMotor_2.getConfigurator().apply(shooterConfig);
-        shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true));
+        // shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true)); // Only Follow when in same gearbox
         SmartDashboard.putBoolean("Loaded", false);
     }
 
@@ -41,14 +41,17 @@ public class Shooter extends SubsystemBase{
 
     public void shoot(double velocity){
         shooterMotor_1.setControl(new VelocityVoltage(velocity));
+        shooterMotor_2.setControl(new VelocityVoltage(velocity));
     }
 
     public void percentOutput(double percentOutput){
         shooterMotor_1.set(percentOutput);
+        shooterMotor_2.set(percentOutput);
     }
 
     public void stop(){
         shooterMotor_1.stopMotor();
+        shooterMotor_2.stopMotor();
     }
 
     //get the current velocity of the shooter
