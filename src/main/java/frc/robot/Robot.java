@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -59,6 +60,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    PortForwarder.add(5800, "photonvision.local", 5800);
     // servo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     // servo.setPeriodMultiplier(PeriodMultiplier.k4X);
     // servo.setAlwaysHighMode();

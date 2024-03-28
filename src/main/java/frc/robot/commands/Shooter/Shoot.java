@@ -20,9 +20,9 @@ public class Shoot extends Command{
     private final Timer timer = new Timer();
     double velocity;
 
-    PhotonCamera camera = new PhotonCamera("YOUR_CAMERA_NAME_HERE");
+    PhotonCamera camera = new PhotonCamera("Global_Shutter_Camera");
     final double ANGULAR_P = 0.1;
-    final double ANGULAR_D = 0.0;
+    final double ANGULAR_D = 0;
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
     public Shoot(Intake intake, Indexer indexer, Shooter shooter, Swerve swerve, double velocity) {

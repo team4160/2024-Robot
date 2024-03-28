@@ -60,7 +60,7 @@ public class SimpleAuto extends SequentialCommandGroup {
 
 
         addCommands(
-            new Shoot(Robot.intake, Robot.indexer, Robot.shooter, 40),
+            new Shoot(Robot.intake, Robot.indexer, Robot.shooter, s_Swerve, 40),
             new WaitCommand(7),
             new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose()))
             // new ParallelCommandGroup(

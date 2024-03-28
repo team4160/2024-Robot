@@ -19,6 +19,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public ADIS16470_IMU imu = new ADIS16470_IMU();
     private ChassisSpeeds latestSpeeds;
+    private Field2d field = new Field2d();
 
     public Swerve() {
         // code will crash if gyro is not plugged in
@@ -140,6 +142,8 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
+        field.setRobotPose(getPose());
+        SmartDashboard.putData("Field", field);
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
