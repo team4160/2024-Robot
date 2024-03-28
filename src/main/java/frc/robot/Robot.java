@@ -65,8 +65,6 @@ public class Robot extends TimedRobot {
     toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
     toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 40));
     toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 75));
-    primeLockButton.onTrue(new PrimeLock(lock));
-    setLockButton.onTrue(new SetLock(lock));
     spitButton.whileTrue(new SpitOut(intake, indexer, shooter));
 
     //cancel all commands when the stop button is pressed
