@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
@@ -141,6 +140,17 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
+        // Correct pose estimate with vision measurements
+        // var visionEst = RobotContainer.vision.getEstimatedGlobalPose();
+        // visionEst.ifPresent(
+        //     est -> {
+        //         var estPose = est.estimatedPose.toPose2d();
+        //         // Change our trust in the measurement based on the tags we can see
+        //         var estStdDevs = RobotContainer.vision.getEstimationStdDevs(estPose);
+        //         swerveOdometry.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        //     }
+        // );
+
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
         field.setRobotPose(getPose());
         SmartDashboard.putData("Field", field);
@@ -150,17 +160,6 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         }
-
-        // Correct pose estimate with vision measurements
-        var visionEst = RobotContainer.vision.getEstimatedGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = RobotContainer.vision.getEstimationStdDevs(estPose);
-
-                    swerveOdometry.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
     }
 
     // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.

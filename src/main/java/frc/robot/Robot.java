@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Autos.ComplexAuto;
 import frc.robot.commands.Shooter.Ingest;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.SpitOut;
@@ -48,6 +49,11 @@ public class Robot extends TimedRobot {
   public JoystickButton setLockButton = new JoystickButton(operator, XboxController.Button.kBack.value);
   public JoystickButton spitButton = new JoystickButton(operator, XboxController.Button.kLeftStick.value);
 
+  // public AddressableLED m_led;
+  // public AddressableLEDBuffer m_ledBuffer;
+
+  private Command auto;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -55,20 +61,26 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     PortForwarder.add(5800, "photonvision.local", 5800);
-    // servo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
-    // servo.setPeriodMultiplier(PeriodMultiplier.k4X);
-    // servo.setAlwaysHighMode();
+
+    // m_led = new AddressableLED(9);
+    // m_ledBuffer = new AddressableLEDBuffer(144);
+    // m_led.setLength(m_ledBuffer.getLength());
+    // m_led.setData(m_ledBuffer);
+    // m_led.start();
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     PD.clearStickyFaults();
     toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
-    toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 40));
-    toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 75));
+    toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 10));
+    toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 60));
     spitButton.whileTrue(new SpitOut(intake, indexer, shooter));
 
     //cancel all commands when the stop button is pressed
     stop.onTrue(new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));
+
+    auto = new ComplexAuto(RobotContainer.s_Swerve);
   }
 
   /**
@@ -85,6 +97,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // rainbow();
+    // m_led.setData(m_ledBuffer);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -97,14 +112,15 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
     // new ZeroHeading(RobotContainer.s_Swerve).execute();
     // new SimpleAuto(RobotContainer.s_Swerve).schedule();
+    auto.schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -139,4 +155,20 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  // private int m_rainbowFirstPixelHue;
+  // private void rainbow() {
+  //   // For every pixel
+  //   for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+  //     // Calculate the hue - hue is easier for rainbows because the color
+  //     // shape is a circle so only one value needs to precess
+  //     final int hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+  //     // Set the value
+  //     m_ledBuffer.setHSV(i, hue, 255, 128);
+  //   }
+  //   // Increase by to make the rainbow "move"
+  //   m_rainbowFirstPixelHue += 3;
+  //   // Check bounds
+  //   m_rainbowFirstPixelHue %= 180;
+  // }
 }

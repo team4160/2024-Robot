@@ -54,6 +54,7 @@ public class RobotContainer {
         // positionChooser.setDefaultOption("DRIVE", "Drive");
         // positionChooser.setDefaultOption("Square", "Square");
         positionChooser.setDefaultOption("Steal", "Steal");
+        // positionChooser.setDefaultOption("Prime", "Prime");
         // positionChooser.addOption("DriveOutMiddle", "DriveOutMiddle");
         // positionChooser.addOption("shoot and drive", "shoot and drive");
         // positionChooser.addOption("test", "New Auto");
@@ -82,6 +83,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         String sp = positionChooser.getSelected();
         boolean isBlue = DriverStation.getAlliance().toString().equals("Blue");
-        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp);
+        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp, true);
     }
 }

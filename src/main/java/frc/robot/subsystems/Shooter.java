@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +17,6 @@ public class Shooter extends SubsystemBase{
 
     public Shooter(){
         shooterConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake; // it could be coast, doesn't really matter
-        shooterConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         shooterConfig.CurrentLimits.SupplyCurrentLimit = 40;
         shooterConfig.CurrentLimits.SupplyCurrentThreshold = 50;
@@ -30,6 +27,8 @@ public class Shooter extends SubsystemBase{
         shooterMotor_1.getConfigurator().apply(shooterConfig);
         shooterMotor_2.getConfigurator().apply(shooterConfig);
         // shooterMotor_2.setControl(new Follower(shooterMotor_1.getDeviceID(), true)); // Only Follow when in same gearbox
+        shooterMotor_1.setInverted(true);
+        shooterMotor_2.setInverted(false);
         SmartDashboard.putBoolean("Loaded", false);
     }
 
