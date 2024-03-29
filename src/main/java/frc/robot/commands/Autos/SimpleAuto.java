@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.commands.Shooter.Shoot;
@@ -54,17 +55,14 @@ public class SimpleAuto extends SequentialCommandGroup {
 
 
         addCommands(
-            new Shoot(Robot.intake, Robot.indexer, Robot.shooter, s_Swerve, 40)
-            // new WaitCommand(7),
+            new Shoot(Robot.intake, Robot.indexer, Robot.shooter, 40),
+            new WaitCommand(7)
             // new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose()))
-            // new ParallelCommandGroup(
-            // new PrimeLock(Robot.lock)
-                 //new ParallelRaceGroup(
-                   // new Ingest(Robot.intake, Robot.indexer, Robot.shooter),
-                   // swerveControllerCommand,  //  run the simple path
-                   // new WaitCommand(7)
-                //)
-            // )
+            // new ParallelRaceGroup(
+               // new Ingest(Robot.intake, Robot.indexer, Robot.shooter),
+               // swerveControllerCommand,  //  run the simple path
+               // new WaitCommand(7)
+            //)
         );
     }
 }

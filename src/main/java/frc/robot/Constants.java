@@ -171,19 +171,19 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
-    public static class Vision {
-        public static final String kCameraName = "Global_Shutter_Camera";
-        // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.6, 0.0, 0.25), new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(30), 0));
+    // public static class Vision {
+    //     public static final String kCameraName = "Global_Shutter_Camera";
+    //     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+    //     public static final Transform3d kRobotToCam =
+    //             new Transform3d(new Translation3d(0.6, 0.0, 0.25), new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(30), 0));
 
-        // The layout of the AprilTags on the field
-        public static final AprilTagFieldLayout kTagLayout =
-                AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+    //     // The layout of the AprilTags on the field
+    //     public static final AprilTagFieldLayout kTagLayout =
+    //             AprilTagFields.kDefaultField.loadAprilTagLayoutField();
 
-        // The standard deviations of our vision estimated poses, which affect correction rate
-        // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-    }
+    //     // The standard deviations of our vision estimated poses, which affect correction rate
+    //     // (Fake values. Experiment and determine estimation noise on an actual robot.)
+    //     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    //     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    // }
 }

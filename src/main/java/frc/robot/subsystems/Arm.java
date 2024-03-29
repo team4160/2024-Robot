@@ -26,11 +26,11 @@ public class Arm extends SubsystemBase{
         armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
         armConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
-        armConfig.CurrentLimits.SupplyCurrentLimit = 80;
-        armConfig.CurrentLimits.SupplyCurrentThreshold = 80;
+        armConfig.CurrentLimits.SupplyCurrentLimit = 100;
+        armConfig.CurrentLimits.SupplyCurrentThreshold = 100;
         armConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
         armConfig.CurrentLimits.StatorCurrentLimitEnable = false;
-        armConfig.CurrentLimits.StatorCurrentLimit = 100;
+        armConfig.CurrentLimits.StatorCurrentLimit = 120;
 
         armConfig.Feedback.SensorToMechanismRatio = 144;
         armConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine; // sensor reports a position of 0 when the mechanism is horizonal (parallel to the ground)

@@ -9,7 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.lib.util.Vision;
+import frc.robot.commands.Autos.BackupAmp;
+import frc.robot.commands.Autos.BackupMid;
+import frc.robot.commands.Autos.BackupStage;
+import frc.robot.commands.Autos.Prime;
+import frc.robot.commands.Autos.Steal;
 import frc.robot.commands.Autos.TrajectoryFollowerCommands;
 import frc.robot.commands.Drive.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -22,7 +26,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    public final static Joystick driver = new Joystick(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -35,9 +39,9 @@ public class RobotContainer {
 
     /* Subsystems */
     public static Swerve s_Swerve = new Swerve();
-    public static Vision vision = new Vision();
+    // public static Vision vision = new Vision();
 
-    private final SendableChooser<String> positionChooser = new SendableChooser<>();
+    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -51,14 +55,12 @@ public class RobotContainer {
             )
         );
 
-        // positionChooser.setDefaultOption("DRIVE", "Drive");
-        // positionChooser.setDefaultOption("Square", "Square");
-        positionChooser.setDefaultOption("Steal", "Steal");
-        // positionChooser.setDefaultOption("Prime", "Prime");
-        // positionChooser.addOption("DriveOutMiddle", "DriveOutMiddle");
-        // positionChooser.addOption("shoot and drive", "shoot and drive");
-        // positionChooser.addOption("test", "New Auto");
-        SmartDashboard.putData("AutonomousSelection", positionChooser);
+        autoChooser.setDefaultOption("Backup - Amp", new BackupAmp());
+        autoChooser.addOption("Backup - Mid", new BackupMid());
+        autoChooser.addOption("Backup - Stage", new BackupStage());
+        autoChooser.addOption("Pime - Stage", new Prime());
+        autoChooser.addOption("Steal - Stage", new Steal());
+        SmartDashboard.putData("AutonomousSelection", autoChooser);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -80,9 +82,12 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        String sp = positionChooser.getSelected();
+    public Command getAutonomousCommand(String path) {
         boolean isBlue = DriverStation.getAlliance().toString().equals("Blue");
-        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(sp, true);
+        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(path, true);
+    }
+
+    public void startAuto () {
+        autoChooser.getSelected().schedule();
     }
 }

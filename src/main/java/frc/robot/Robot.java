@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Autos.ComplexAuto;
 import frc.robot.commands.Shooter.Ingest;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.SpitOut;
@@ -40,7 +39,7 @@ public class Robot extends TimedRobot {
   public static Arm arm = new Arm();
   public PowerDistribution PD = new PowerDistribution(1, ModuleType.kRev);
 
-  private XboxController operator = new XboxController(1);
+  public final static XboxController operator = new XboxController(1);
   public JoystickButton toggle_intake = new JoystickButton(operator, XboxController.Button.kB.value);
   public JoystickButton toggle_slowshot = new JoystickButton(operator, XboxController.Button.kA.value);
   public JoystickButton toggle_fastshot = new JoystickButton(operator, XboxController.Button.kX.value);
@@ -51,8 +50,6 @@ public class Robot extends TimedRobot {
 
   // public AddressableLED m_led;
   // public AddressableLEDBuffer m_ledBuffer;
-
-  private Command auto;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -73,14 +70,12 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     PD.clearStickyFaults();
     toggle_intake.onTrue(new Ingest(intake, indexer, shooter));
-    toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 10));
-    toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, RobotContainer.s_Swerve, 60));
+    toggle_slowshot.onTrue(new Shoot(intake, indexer, shooter, 10));
+    toggle_fastshot.onTrue(new Shoot(intake, indexer, shooter, 60));
     spitButton.whileTrue(new SpitOut(intake, indexer, shooter));
 
     //cancel all commands when the stop button is pressed
     stop.onTrue(new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));
-
-    auto = new ComplexAuto(RobotContainer.s_Swerve);
   }
 
   /**
@@ -112,15 +107,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
-    // new ZeroHeading(RobotContainer.s_Swerve).execute();
-    // new SimpleAuto(RobotContainer.s_Swerve).schedule();
-    auto.schedule();
+    new RobotContainer().startAuto();
   }
 
   /** This function is called periodically during autonomous. */

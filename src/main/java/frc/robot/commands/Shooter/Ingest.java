@@ -1,8 +1,11 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -40,6 +43,8 @@ public class Ingest extends Command {
             SmartDashboard.putBoolean("Loaded", true);
             indexer.setIndex(-0.35);
             shooter.percentOutput(-0.10);
+            RobotContainer.driver.setRumble(RumbleType.kBothRumble,1);
+            Robot.operator.setRumble(RumbleType.kBothRumble, 1);
         }
     }
 
@@ -53,6 +58,8 @@ public class Ingest extends Command {
         intake.setIntake(0);
         indexer.setIndex(0);
         shooter.percentOutput(0);
+        RobotContainer.driver.setRumble(RumbleType.kBothRumble,0);
+        Robot.operator.setRumble(RumbleType.kBothRumble, 0);
         if (!interrupted) { 
             shooter.isLoaded = true;
         }
