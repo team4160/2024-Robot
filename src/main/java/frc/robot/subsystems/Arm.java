@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -46,9 +46,11 @@ public class Arm extends SubsystemBase{
 
         armMotor_1.getConfigurator().apply(armConfig);
         armMotor_2.getConfigurator().apply(armConfig);
-        armMotor_2.setControl(new Follower(armMotor_1.getDeviceID(), true));
+        // armMotor_2.setControl(new Follower(armMotor_1.getDeviceID(), true));
+        armMotor_2.setInverted(true);
 
         armMotor_1.setPosition(0);
+        armMotor_2.setPosition(0);
     }
 
     @Override
@@ -68,8 +70,8 @@ public class Arm extends SubsystemBase{
     }
 
     public void setArm(double percentOutput){
-        // armMotor_1.setControl(new VoltageOut(percentOutput * 12));
-        armMotor_1.set(percentOutput);
+        armMotor_1.setControl(new VoltageOut(percentOutput * 12));
+        armMotor_2.setControl(new VoltageOut(percentOutput * 12));
     }
     // public void setArmAngle(double degrees) {
     //     // degrees = MathUtil.clamp(degrees, ARM_LOWER_LIMIT, ARM_UPPER_LIMIT);

@@ -51,8 +51,8 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 60;
-        public static final int driveCurrentThreshold = 75;
+        public static final int driveCurrentLimit = 40;
+        public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -139,11 +139,6 @@ public final class Constants {
         public static final int arm_2_id = 22;
         public static final int indexer_1_id = 31;
         public static final int indexer_2_id = 32;
-        public static final int lock_id = 14;
-    }
-
-    public static final class Globals {
-        public static final int compressorID = 1; // need id num
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

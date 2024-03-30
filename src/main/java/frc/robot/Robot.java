@@ -131,7 +131,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // shooter.shoot(operator.getRawAxis(1));
     // intake.setIntake(operator.getRawAxis(5));
-    arm.setArm(operator.getRawAxis(XboxController.Axis.kRightY.value) * -1);
+    arm.setArm(deadband(operator.getRawAxis(XboxController.Axis.kRightY.value)) * -1);
+  }
+
+  private double deadband (double input) {
+    if (input > -0.05 && input < 0.05)
+      return 0; 
+    return input;
   }
 
   @Override

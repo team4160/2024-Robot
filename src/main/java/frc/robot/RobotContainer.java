@@ -15,6 +15,7 @@ import frc.robot.commands.Autos.JustShoot;
 import frc.robot.commands.Autos.Prime;
 import frc.robot.commands.Autos.SimpleAuto;
 import frc.robot.commands.Autos.Steal;
+import frc.robot.commands.Autos.StealAmp;
 import frc.robot.commands.Drive.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -61,6 +62,7 @@ public class RobotContainer {
         autoChooser.addOption("Backup - Stage", new BackupStage());
         autoChooser.addOption("Pime - Stage", new Prime());
         autoChooser.addOption("Steal - Stage", new Steal());
+        autoChooser.addOption("Steal - Amp", new StealAmp());
         autoChooser.addOption("Simple", new SimpleAuto(s_Swerve));
         SmartDashboard.putData("AutonomousSelection", autoChooser);
 
