@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -12,9 +11,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autos.BackupAmp;
 import frc.robot.commands.Autos.BackupMid;
 import frc.robot.commands.Autos.BackupStage;
+import frc.robot.commands.Autos.JustShoot;
 import frc.robot.commands.Autos.Prime;
+import frc.robot.commands.Autos.SimpleAuto;
 import frc.robot.commands.Autos.Steal;
-import frc.robot.commands.Autos.TrajectoryFollowerCommands;
 import frc.robot.commands.Drive.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -41,7 +41,7 @@ public class RobotContainer {
     public static Swerve s_Swerve = new Swerve();
     // public static Vision vision = new Vision();
 
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    public final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -55,11 +55,13 @@ public class RobotContainer {
             )
         );
 
-        autoChooser.setDefaultOption("Backup - Amp", new BackupAmp());
+        autoChooser.setDefaultOption("Just Shoot", new JustShoot());
+        autoChooser.addOption("Backup - Amp", new BackupAmp());
         autoChooser.addOption("Backup - Mid", new BackupMid());
         autoChooser.addOption("Backup - Stage", new BackupStage());
         autoChooser.addOption("Pime - Stage", new Prime());
         autoChooser.addOption("Steal - Stage", new Steal());
+        autoChooser.addOption("Simple", new SimpleAuto(s_Swerve));
         SmartDashboard.putData("AutonomousSelection", autoChooser);
 
         // Configure the button bindings
@@ -75,19 +77,5 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand(String path) {
-        boolean isBlue = DriverStation.getAlliance().toString().equals("Blue");
-        return new TrajectoryFollowerCommands(s_Swerve, isBlue).followPath(path, true);
-    }
-
-    public void startAuto () {
-        autoChooser.getSelected().schedule();
     }
 }

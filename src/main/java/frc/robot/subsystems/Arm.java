@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase{
         armConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         armConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.22;
         armConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -0.02;
 
         armConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
         armConfig.CurrentLimits.SupplyCurrentLimit = 100;
