@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,13 +31,13 @@ public class RobotContainer {
     public final static Joystick driver = new Joystick(0);
 
     /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
+    private final int translationAxis = PS4Controller.Axis.kLeftY.value;
+    private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
+    private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, PS4Controller.Button.kL1.value);
 
     /* Subsystems */
     public static Swerve s_Swerve = new Swerve();

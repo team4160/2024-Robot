@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Autos.Spin;
 import frc.robot.commands.Shooter.Ingest;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.SpitOut;
@@ -108,7 +109,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.s_Swerve.resetModulesToAbsolute();
-    m_robotContainer.autoChooser.getSelected().schedule();
+    // m_robotContainer.autoChooser.getSelected().schedule();
+    new Spin(RobotContainer.s_Swerve).schedule();
   }
 
   /** This function is called periodically during autonomous. */
