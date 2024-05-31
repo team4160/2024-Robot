@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -26,8 +27,8 @@ public class Arm extends SubsystemBase{
         armConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -0.02;
 
         armConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
-        armConfig.CurrentLimits.SupplyCurrentLimit = 100;
-        armConfig.CurrentLimits.SupplyCurrentThreshold = 100;
+        armConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        armConfig.CurrentLimits.SupplyCurrentThreshold = 20;
         armConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
         armConfig.CurrentLimits.StatorCurrentLimitEnable = false;
         armConfig.CurrentLimits.StatorCurrentLimit = 120;
@@ -73,15 +74,15 @@ public class Arm extends SubsystemBase{
         armMotor_1.setControl(new VoltageOut(percentOutput * 12));
         armMotor_2.setControl(new VoltageOut(percentOutput * 12));
     }
-    // public void setArmAngle(double degrees) {
-    //     // degrees = MathUtil.clamp(degrees, ARM_LOWER_LIMIT, ARM_UPPER_LIMIT);
-    //     // armMotor_1.setControl(new PositionVoltage(0).withSlot(0).withPosition(degrees / 360.0));
-    //     armMotor_1.setControl(new MotionMagicVoltage(0).withSlot(0).withPosition(degrees / 360.0));
-    // }
-    // public void Up(){ // need to get the positions
-    //     setArmAngle(0);
-    // }
-    // public void Down(){
-    //     setArmAngle(90);
-    // }
+    public void setArmAngle(double degrees) {
+        // degrees = MathUtil.clamp(degrees, ARM_LOWER_LIMIT, ARM_UPPER_LIMIT);
+        // armMotor_1.setControl(new PositionVoltage(0).withSlot(0).withPosition(degrees / 360.0));
+        armMotor_1.setControl(new MotionMagicVoltage(0).withSlot(0).withPosition(degrees / 360.0));
+    }
+    public void Up(){ // need to get the positions
+        setArmAngle(40);
+    }
+    public void Down(){
+        setArmAngle(0);
+    }
 }

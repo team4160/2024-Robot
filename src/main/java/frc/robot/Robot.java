@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.s_Swerve.resetModulesToAbsolute();
     // m_robotContainer.autoChooser.getSelected().schedule();
-    new Spin(RobotContainer.s_Swerve).schedule();
+    new Spin(RobotContainer.s_Swerve, arm).schedule();
   }
 
   /** This function is called periodically during autonomous. */
